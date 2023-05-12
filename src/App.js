@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
+
+const API = process.env.REACT_APP_API_URL;
 
 function App() {
+  const [snacks, setSnacks] = useState([]);
+  useEffect(() => {
+    fetch(`${API}/snacks`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSnacks(data.result);
+      });
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Snack-a-Log</h1>
+      <h2>All Snacks</h2>
+      <ul>
+        {snacks.map((snack) => {
+          return <li key={snack.id}>{snack.name}</li>;
+        })}
+      </ul>
     </div>
   );
 }
